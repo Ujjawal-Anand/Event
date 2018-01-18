@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/new_primary_color</color>
+    <color name="colorPrimaryDark">@color/new_accent_color</color>
+    <color name="colorAccent">@color/new_accent_color</color>
+
+    <color name="new_primary_color">#F6F6F6</color>
+    <color name="new_accent_color">#535366</color>
+    <color name="new_accent_color_alpha_40">#66535366</color>
+    <color name="new_accent_color_alpha_30">#4D535366</color>
+    <color name="new_accent_color_alpha_5">#0D535366</color>
+    <color name="new_red_color">#C82850</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <drawable name="completedTaskBackground">#CCCCCC</drawable>
+
+    <drawable name="touchFeedback">#CFD8DC</drawable>
+
+
+
+    <color name="login_edit_text_block_stroke_color">#979797</color>
+    <color name="login_edit_text_block_background_color">@color/transparent</color>
+    <color name="login_edit_text_block_background_color_wrong">#0CC82850</color>
+    <color name="drawer_item_highlighting_pressed">#EDEDED</color>
+    <color name="login_error_color">@color/new_red_color</color>
+    <color name="remind_password_button_text_color">#4990e2</color>
+
+    <color name="login_button_color">#1966CC66</color>
+    <color name="login_button_color_pressed">#6666CC66</color>
+    <color name="login_button_color_disabled">#0C66CC66</color>
+
+</resources>

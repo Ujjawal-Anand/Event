@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Event</string>
+
+    <!--Login-->
+    <string name="sign_up">SIGN UP</string>
+    <string name="login">LOG IN</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="remind_password">Forgot password?</string>
+    <string name="password_hint">Password</string>
+    <string name="name">Username</string>
+    <string name="username_error">Username cannot be empty</string>
+    <string name="password_error">Password cannot be empty</string>
+
+    <string name="add_event">New TO-DO</string>
+    <string name="edit_event">Edit TO-DO</string>
+    <string name="event_marked_complete">Task marked complete</string>
+    <string name="event_marked_active">Task marked active</string>
+    <string name="loading_events_error">Error while loading events</string>
+    <string name="completed_events_cleared">Completed events cleared</string>
+    <string name="menu_filter">Filter</string>
+    <string name="menu_clear">Clear completed</string>
+    <string name="menu_delete_event">Delete event</string>
+    <string name="navigation_view_header_title">TO-DOs</string>
+    <string name="title_hint">Title</string>
+    <string name="description_hint">Enter your TO-DO here.</string>
+    <string name="empty_event_message">TO DOs cannot be empty</string>
+    <string name="successfully_saved_event_message">TO-DO saved</string>
+    <string name="list_title">TO-DO List</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="statistics_no_events">You have no events.</string>
+    <string name="statistics_active_events">Active events:</string>
+    <string name="statistics_completed_events">Completed events:</string>
+    <string name="statistics_error">Error loading statistics.</string>
+    <string name="no_data">No data</string>
+    <string name="loading">LOADING</string>
+
+    <string-array name="list_events_array">
+        <item>@string/nav_all</item>
+        <item>@string/nav_active</item>
+        <item>@string/nav_completed</item>
+    </string-array>
+    <string name="nav_all">All</string>
+    <string name="nav_active">Active</string>
+    <string name="nav_completed">Completed</string>
+    <string name="label_all">All TO-DOs</string>
+    <string name="label_active">Active TO-DOs</string>
+    <string name="label_completed">Completed TO-DOs</string>
+    <string name="no_events_all">You have no TO-DOs!</string>
+    <string name="no_events_active">You have no active TO-DOs!</string>
+    <string name="no_events_completed">You have no completed TO-DOs!</string>
+    <string name="no_events_add">Add a TO-DO item +</string>
+    <string name="refresh">Refresh</string>
+
+
+</resources>
