@@ -12,8 +12,10 @@
     <string name="username_error">Username cannot be empty</string>
     <string name="password_error">Password cannot be empty</string>
 
-    <string name="add_event">New TO-DO</string>
-    <string name="edit_event">Edit TO-DO</string>
+    <string name="action_logout">Logout</string>
+
+    <string name="add_event">New Event</string>
+    <string name="edit_event">Edit Event</string>
     <string name="event_marked_complete">Task marked complete</string>
     <string name="event_marked_active">Task marked active</string>
     <string name="loading_events_error">Error while loading events</string>
@@ -21,12 +23,12 @@
     <string name="menu_filter">Filter</string>
     <string name="menu_clear">Clear completed</string>
     <string name="menu_delete_event">Delete event</string>
-    <string name="navigation_view_header_title">TO-DOs</string>
+    <string name="navigation_view_header_title">Events</string>
     <string name="title_hint">Title</string>
     <string name="description_hint">Enter event details in here</string>
     <string name="empty_event_message">Event can not be empty. Please Select an Image.</string>
-    <string name="successfully_saved_event_message">TO-DO saved</string>
-    <string name="list_title">TO-DO List</string>
+    <string name="successfully_saved_event_message">Event saved</string>
+    <string name="list_title">Event List</string>
     <string name="statistics_title">Statistics</string>
     <string name="statistics_no_events">You have no events.</string>
     <string name="statistics_active_events">Active events:</string>
@@ -43,13 +45,13 @@
     <string name="nav_all">All</string>
     <string name="nav_active">Active</string>
     <string name="nav_completed">Completed</string>
-    <string name="label_all">All TO-DOs</string>
-    <string name="label_active">Active TO-DOs</string>
-    <string name="label_completed">Completed TO-DOs</string>
-    <string name="no_events_all">You have no TO-DOs!</string>
-    <string name="no_events_active">You have no active TO-DOs!</string>
-    <string name="no_events_completed">You have no completed TO-DOs!</string>
-    <string name="no_events_add">Add a TO-DO item +</string>
+    <string name="label_all">All Events</string>
+    <string name="label_active">Active Events</string>
+    <string name="label_completed">Completed Events</string>
+    <string name="no_events_all">You have no Events!</string>
+    <string name="no_events_active">You have no active Events!</string>
+    <string name="no_events_completed">You have no completed Events!</string>
+    <string name="no_events_add">Add a Event item +</string>
     <string name="refresh">Refresh</string>
 
     <string name="ok">OK</string>

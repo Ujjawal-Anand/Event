@@ -7,7 +7,7 @@
     android:fillViewport="true"
     android:overScrollMode="never"
     android:id="@+id/registerRootView"
-    tools:context=".Login.LoginActivity">
+    tools:context=".login.LoginActivity">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/root_view"

@@ -22,17 +22,18 @@
 
         </provider>
 
-        <activity android:name=".Login.LoginActivity">
+        <activity android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".home.EventsActivity"><intent-filter>
-            <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+        <activity android:name=".login.LoginActivity"/>
+        <activity android:name=".home.EventsActivity"/>
         <activity android:name=".addeditevent.AddEditEventActivity"/>
-        <activity android:name=".eventdetail.EventDetailActivity"/>
     </application>
 
 </manifest>

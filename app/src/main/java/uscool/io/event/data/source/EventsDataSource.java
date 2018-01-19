@@ -38,11 +38,12 @@ public interface EventsDataSource {
 
     void saveEvent(@NonNull Event event);
 
+
+    void activateEvent(@NonNull Event event);
+
     void refreshEvents();
 
     void deleteAllEvents();
-
-//    void updateLikes(String eventId, int likes);
 
     void deleteEvent(@NonNull String eventId);
 }

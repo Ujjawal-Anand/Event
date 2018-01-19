@@ -71,7 +71,7 @@ public class AddEditEventPresenter implements AddEditEventContract.Presenter,
     public void onEventLoaded(Event event) {
         // The view may not be able to handle UI updates anymore
         if (mAddEventView.isActive()) {
-            mAddEventView.setImage(event.getImageFilePath());
+            mAddEventView.setImage(event.getImgFilePath());
             mAddEventView.setDescription(event.getDescription());
         }
         mIsDataMissing = false;

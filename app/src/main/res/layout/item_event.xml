@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!-- item_feed.xml -->
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,11 +14,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/ivUserProfile"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_feed_top" />
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/zodiac_icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="2dp"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="5dp"
+                android:paddingBottom="10dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/username"
+                android:text="andy1729"
+                android:textStyle="bold"
+                android:layout_marginTop="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"/>
+
+        </LinearLayout>
 
         <uscool.io.event.util.SquaredFrameLayout
             android:id="@+id/vImageRoot"
@@ -50,6 +71,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="normal"
+            android:text="@string/description_hint"
             android:id="@+id/descriptionText"/>
         <LinearLayout
             android:layout_width="match_parent"

@@ -109,6 +109,19 @@ public class EventsLocalDataSource implements EventsDataSource {
     }
 
 
+
+    @Override
+    public void activateEvent(@NonNull final Event event) {
+    /*    Runnable activateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mEventsDao.updateCompleted(event.getId(), false);
+            }
+        };
+        mAppExecutors.diskIO().execute(activateRunnable);*/
+    }
+
+
     @Override
     public void refreshEvents() {
         // Not required because the {@link EventsRepository} handles the logic of refreshing the

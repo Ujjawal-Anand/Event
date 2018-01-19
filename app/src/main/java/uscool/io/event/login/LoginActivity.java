@@ -1,4 +1,4 @@
-package uscool.io.event.Login;
+package uscool.io.event.login;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 
 import uscool.io.event.R;
 import uscool.io.event.home.EventsActivity;
+import uscool.io.event.util.PrefUtil;
 
 
 public class LoginActivity extends Activity implements LoginContract.LoginView, View.OnClickListener {
@@ -30,6 +31,20 @@ public class LoginActivity extends Activity implements LoginContract.LoginView, 
         findViewById(R.id.signUpButton).setOnClickListener(this);
 
         presenter = new LoginPresenterImpl(this,new LoginInteractorImpl());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkIsLoggedIn();
+    }
+
+
+    @Override
+    public void checkIsLoggedIn() {
+        if(PrefUtil.isLoggedIn(getApplicationContext())) {
+            navigateToHome();
+        }
     }
 
     @Override protected void onDestroy() {
@@ -60,5 +75,6 @@ public class LoginActivity extends Activity implements LoginContract.LoginView, 
 
     @Override public void onClick(View v) {
         presenter.validateCredentials(username.getText().toString(), password.getText().toString());
+        PrefUtil.createUser(getApplicationContext(), username.getText().toString(), password.getText().toString());
     }
 }

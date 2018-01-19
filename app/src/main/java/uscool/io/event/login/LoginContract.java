@@ -1,4 +1,4 @@
-package uscool.io.event.Login;
+package uscool.io.event.login;
 
 /**
  * Created by andy1729 on 17/01/18.
@@ -7,6 +7,8 @@ package uscool.io.event.Login;
 public interface LoginContract {
     interface LoginView {
         void showProgress();
+
+        void checkIsLoggedIn();
 
         void hideProgress();
 

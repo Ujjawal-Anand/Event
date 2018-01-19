@@ -1,4 +1,4 @@
-package uscool.io.event.Login;
+package uscool.io.event.login;
 
 
 public class LoginPresenterImpl implements LoginContract.LoginPresenter, LoginInteractor.OnLoginFinishedListener {

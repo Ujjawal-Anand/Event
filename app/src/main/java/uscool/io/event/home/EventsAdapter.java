@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +22,8 @@ import uscool.io.event.data.Event;
 import uscool.io.event.util.AppUtil;
 
 /**
- * Created by andy1729 on 18/01/18.
+ * Created by andy1729 on 18/01/
+ *
  */
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder>{
@@ -44,8 +47,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Event event = mEventList.get(position);
-            holder.ivFeedCenter.setImageBitmap(AppUtil.getBitmapFromFilePath(event.getImageFilePath()));
+            Event event = mEventList.get(mEventList.size()-position-1);
+            holder.tvUsername.setText(event.getUsername());
+            if(event.getImgFilePath().equals("null")) {
+                Glide.with(mContext).load(R.mipmap.img2).into(holder.ivFeedCenter);
+            } else {
+                Glide.with(mContext).load(event.getImgFilePath()).into(holder.ivFeedCenter);
+            }
             holder.tvDescription.setText(event.getDescription());
             holder.btnLike.setImageResource(R.mipmap.ic_heart_outline_grey);
         }
@@ -69,19 +77,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivFeedCenter;
         TextView tvDescription;
+        TextView tvUsername;
         ImageButton btnComments;
         ImageButton btnLike;
         ImageButton btnMore;
         View vBgLike;
         ImageView ivLike;
         TextSwitcher tsLikesCounter;
-        ImageView ivUserProfile;
         FrameLayout vImageRoot;
 
 
         private ViewHolder(View view) {
             super(view);
             ivFeedCenter = view.findViewById(R.id.ivFeedCenter);
+            tvUsername = view.findViewById(R.id.username);
             tvDescription = view.findViewById(R.id.descriptionText);
             btnComments = view.findViewById(R.id.btnComments);
             btnLike = view.findViewById(R.id.btnLike);
@@ -89,15 +98,23 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             vBgLike = view.findViewById(R.id.vBgLike);
             ivLike = view.findViewById(R.id.ivLike);
             tsLikesCounter = view.findViewById(R.id.tsLikesCounter);
-            ivUserProfile = view.findViewById(R.id.ivUserProfile);
             vImageRoot = view.findViewById(R.id.vImageRoot);
+
+            btnLike.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View view) {
-//
+            int id = view.getId();
+            switch (id) {
+                case R.id.btnLike:
+                    btnLike.setImageResource( R.mipmap.ic_heart_red);
+                    break;
+            }
         }
+
+
     }
 
 

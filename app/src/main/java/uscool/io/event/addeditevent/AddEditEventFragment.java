@@ -25,6 +25,7 @@ import uscool.io.event.R;
 import uscool.io.event.photoPicker.DefaultCallback;
 import uscool.io.event.photoPicker.EasyImage;
 import uscool.io.event.util.AppUtil;
+import uscool.io.event.util.PrefUtil;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -51,7 +52,6 @@ public class AddEditEventFragment extends Fragment implements AddEditEventContra
 
     private String mImageFilePath;
 
-    private String mUsername = "Ujjawal";
 
     public static AddEditEventFragment newInstance() {
         return new AddEditEventFragment();
@@ -82,7 +82,7 @@ public class AddEditEventFragment extends Fragment implements AddEditEventContra
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.saveEvent(mUsername, mImageFilePath, mDescription.getText().toString());
+                mPresenter.saveEvent(PrefUtil.getUsername(getContext()), mImageFilePath, mDescription.getText().toString());
             }
         });
     }
@@ -132,7 +132,7 @@ public class AddEditEventFragment extends Fragment implements AddEditEventContra
 
             @Override
             public void onImagesPicked(@NonNull ArrayList<File> imageFiles, ArrayList<String> filePaths, EasyImage.ImageSource source, int type) {
-                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                 File imgFile = imageFiles.get(0);
                 mImageFilePath = imgFile.getAbsolutePath();
                 if(imgFile.exists()){

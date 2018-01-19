@@ -53,14 +53,15 @@ public interface EventsDao {
     int updateEvent(Event event);
 
     /**
-     * Update the likes of an event
+     * Update number of likes
      *
      * @param eventId    id of the event
-     * @param likes number of likes to be updated
-     */
-    @Query("UPDATE EVENTS SET likes = :likes WHERE entryid= :eventId")
-    void updateLikes(String eventId, int likes);
+     * @param numLikes num of likes
+     *//*
 
+    @Query("UPDATE Events SET likes = :likes WHERE entryid = :eventId")
+    void updateNumLikes(String eventId, int numLikes);
+*/
     /**
      * Delete a event by id.
      *

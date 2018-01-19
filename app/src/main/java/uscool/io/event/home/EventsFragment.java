@@ -15,28 +15,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 
+import uscool.io.event.login.LoginActivity;
 import uscool.io.event.R;
 import uscool.io.event.addeditevent.AddEditEventActivity;
 import uscool.io.event.data.Event;
 import uscool.io.event.util.GridSpacingItemDecoration;
+import uscool.io.event.util.PrefUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +208,11 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
                 mPresenter.loadEvents(true);
+                break;
+            case R.id.menu_logout:
+                PrefUtil.logOut(getContext());
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                getActivity().finish();
                 break;
         }
         return true;
