@@ -1,6 +1,7 @@
 package uscool.io.event.login;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,8 @@ public class LoginActivity extends Activity implements LoginContract.LoginView, 
     private EditText password;
     private EditText email;
     private LoginContract.LoginPresenter presenter;
+    private ProgressDialog mProgressDialog;
+
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +56,19 @@ public class LoginActivity extends Activity implements LoginContract.LoginView, 
     }
 
     @Override public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setMessage("Loading...");
+        }
+
+        mProgressDialog.show();
     }
 
     @Override public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     @Override public void setUsernameError() {
