@@ -26,12 +26,20 @@ public final class Event {
     private final String mId;
 
     @Nullable
-    @ColumnInfo(name = "title")
-    private final String mTitle;
+    @ColumnInfo(name="username")
+    private final String mUsername;
+
+
+    @Nullable
+    @ColumnInfo(name = "imageFilePath")
+    private final String mImageFilePath;
 
     @Nullable
     @ColumnInfo(name = "description")
     private final String mDescription;
+
+    @ColumnInfo(name="likes")
+    private final int mNumLikes;
 
 /*
     @Nullable
@@ -39,60 +47,34 @@ public final class Event {
     private final int mImageId;
 */
 
-    @ColumnInfo(name = "completed")
-    private final boolean mCompleted;
 
     /**
      * Use this constructor to create a new active Event.
      *
-     * @param title       title of the event
+     * @param imageFilePath       imageFilePath of the event
      * @param description description of the event
      */
     @Ignore
-    public Event(@Nullable String title, @Nullable String description) {
-        this(title, description, UUID.randomUUID().toString(), false);
+    public Event(@Nullable String username, @Nullable String imageFilePath, @Nullable String description) {
+        this(username, imageFilePath, description, UUID.randomUUID().toString(), 0);
     }
 
-    /**
-     * Use this constructor to create an active Event if the Event already has an id (copy of another
-     * Event).
-     *
-     * @param title       title of the event
-     * @param description description of the event
-     * @param id          id of the event
-     */
-    @Ignore
-    public Event(@Nullable String title, @Nullable String description, @NonNull String id) {
-        this(title, description, id, false);
-    }
-
-    /**
-     * Use this constructor to create a new completed Event.
-     *
-     * @param title       title of the event
-     * @param description description of the event
-     * @param completed   true if the event is completed, false if it's active
-     */
-    @Ignore
-    public Event(@Nullable String title, @Nullable String description, boolean completed) {
-        this(title, description, UUID.randomUUID().toString(), completed);
-    }
 
     /**
      * Use this constructor to specify a completed Event if the Event already has an id (copy of
      * another Event).
      *
-     * @param title       title of the event
+     * @param imageFilePath       imageFilePath of the event
      * @param description description of the event
      * @param id          id of the event
-     * @param completed   true if the event is completed, false if it's active
      */
-    public Event(@Nullable String title, @Nullable String description,
-                 @NonNull String id, boolean completed) {
+    public Event(@Nullable String username, @Nullable String imageFilePath, @Nullable String description,
+                 @NonNull String id, int numLikes) {
         mId = id;
-        mTitle = title;
+        mImageFilePath = imageFilePath;
         mDescription = description;
-        mCompleted = completed;
+        mUsername = username;
+        mNumLikes = numLikes;
     }
 
     @NonNull
@@ -101,34 +83,30 @@ public final class Event {
     }
 
     @Nullable
-    public String getTitle() {
-        return mTitle;
+    public String getImageFilePath() {
+        return mImageFilePath;
     }
 
     @Nullable
-    public String getTitleForList() {
-        if (!Strings.isNullOrEmpty(mTitle)) {
-            return mTitle;
-        } else {
-            return mDescription;
-        }
+    public String getUsername() {
+        return mUsername;
     }
+
+    @Nullable
+    public int getNumLikes() {
+        return mNumLikes;
+    }
+
+
 
     @Nullable
     public String getDescription() {
         return mDescription;
     }
 
-    public boolean isCompleted() {
-        return mCompleted;
-    }
-
-    public boolean isActive() {
-        return !mCompleted;
-    }
 
     public boolean isEmpty() {
-        return Strings.isNullOrEmpty(mTitle) &&
+        return Strings.isNullOrEmpty(mImageFilePath) &&
                Strings.isNullOrEmpty(mDescription);
     }
 
@@ -138,17 +116,17 @@ public final class Event {
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
         return Objects.equal(mId, event.mId) &&
-               Objects.equal(mTitle, event.mTitle) &&
+               Objects.equal(mImageFilePath, event.mImageFilePath) &&
                Objects.equal(mDescription, event.mDescription);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mId, mTitle, mDescription);
+        return Objects.hashCode(mId, mImageFilePath, mDescription);
     }
 
     @Override
     public String toString() {
-        return "Event with title " + mTitle;
+        return "Event with title " + mImageFilePath;
     }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uscool.io.event">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -9,14 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="uscool.io.event"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </provider>
+
+        <activity android:name=".Login.LoginActivity">
+
         </activity>
-        <activity android:name=".home.EventsActivity"/>
+        <activity android:name=".home.EventsActivity"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".addeditevent.AddEditEventActivity"/>
         <activity android:name=".eventdetail.EventDetailActivity"/>
     </application>

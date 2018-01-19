@@ -14,18 +14,20 @@ public interface AddEditEventContract {
 
         void showEmptyEventError();
 
+        void initPhotoPicker();
+
         void showEventsList();
 
-        void setTitle(String title);
-
         void setDescription(String description);
+
+        void setImage(String filepath);
 
         boolean isActive();
     }
 
     interface Presenter extends BasePresenter {
 
-        void saveEvent(String title, String description);
+        void saveEvent(String username, String imageFilePath, String description);
 
         void populateEvent();
 

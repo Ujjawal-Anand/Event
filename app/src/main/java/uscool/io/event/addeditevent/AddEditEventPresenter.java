@@ -49,17 +49,14 @@ public class AddEditEventPresenter implements AddEditEventContract.Presenter,
     @Override
     public void start() {
         if (!isNewEvent() && mIsDataMissing) {
+            mAddEventView.initPhotoPicker();
             populateEvent();
         }
     }
 
     @Override
-    public void saveEvent(String title, String description) {
-        if (isNewEvent()) {
-            createEvent(title, description);
-        } else {
-            updateEvent(title, description);
-        }
+    public void saveEvent(String username, String imageFilePath, String description) {
+            createEvent(username, imageFilePath, description);
     }
 
     @Override
@@ -74,7 +71,7 @@ public class AddEditEventPresenter implements AddEditEventContract.Presenter,
     public void onEventLoaded(Event event) {
         // The view may not be able to handle UI updates anymore
         if (mAddEventView.isActive()) {
-            mAddEventView.setTitle(event.getTitle());
+            mAddEventView.setImage(event.getImageFilePath());
             mAddEventView.setDescription(event.getDescription());
         }
         mIsDataMissing = false;
@@ -97,8 +94,8 @@ public class AddEditEventPresenter implements AddEditEventContract.Presenter,
         return mEventId == null;
     }
 
-    private void createEvent(String title, String description) {
-        Event newEvent = new Event(title, description);
+    private void createEvent(String username, String filePath, String description) {
+        Event newEvent = new Event(username, filePath, description);
         if (newEvent.isEmpty()) {
             mAddEventView.showEmptyEventError();
         } else {
@@ -107,11 +104,4 @@ public class AddEditEventPresenter implements AddEditEventContract.Presenter,
         }
     }
 
-    private void updateEvent(String title, String description) {
-        if (isNewEvent()) {
-            throw new RuntimeException("updateEvent() was called but event is new.");
-        }
-        mEventsRepository.saveEvent(new Event(title, description, mEventId));
-        mAddEventView.showEventsList(); // After an edit, go back to the list.
-    }
 }

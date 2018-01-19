@@ -25,31 +25,16 @@ public interface EventsContract {
 
         void showEventDetailsUi(String eventId);
 
-        void showEventMarkedComplete();
-
-        void showEventMarkedActive();
-
-        void showCompletedEventsCleared();
-
         void showLoadingEventsError();
 
         void showNoEvents();
 
-        void showActiveFilterLabel();
-
-        void showCompletedFilterLabel();
-
-        void showAllFilterLabel();
-
-        void showNoActiveEvents();
-
-        void showNoCompletedEvents();
+        void requestForPermission();
 
         void showSuccessfullySavedMessage();
 
         boolean isActive();
 
-        void showFilteringPopUpMenu();
     }
 
     interface Presenter extends BasePresenter {
@@ -62,14 +47,5 @@ public interface EventsContract {
 
         void openEventDetails(@NonNull Event requestedEvent);
 
-        void completeEvent(@NonNull Event completedEvent);
-
-        void activateEvent(@NonNull Event activeEvent);
-
-        void clearCompletedEvents();
-
-        void setFiltering(EventsFilterType requestType);
-
-        EventsFilterType getFiltering();
     }
 }

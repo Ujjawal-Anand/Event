@@ -108,53 +108,6 @@ public class EventsLocalDataSource implements EventsDataSource {
         mAppExecutors.diskIO().execute(saveRunnable);
     }
 
-    @Override
-    public void completeEvent(@NonNull final Event event) {
-        Runnable completeRunnable = new Runnable() {
-            @Override
-            public void run() {
-                mEventsDao.updateCompleted(event.getId(), true);
-            }
-        };
-
-        mAppExecutors.diskIO().execute(completeRunnable);
-    }
-
-    @Override
-    public void completeEvent(@NonNull String eventId) {
-        // Not required for the local data source because the {@link EventsRepository} handles
-        // converting from a {@code eventId} to a {@link event} using its cached data.
-    }
-
-    @Override
-    public void activateEvent(@NonNull final Event event) {
-        Runnable activateRunnable = new Runnable() {
-            @Override
-            public void run() {
-                mEventsDao.updateCompleted(event.getId(), false);
-            }
-        };
-        mAppExecutors.diskIO().execute(activateRunnable);
-    }
-
-    @Override
-    public void activateEvent(@NonNull String eventId) {
-        // Not required for the local data source because the {@link EventsRepository} handles
-        // converting from a {@code eventId} to a {@link event} using its cached data.
-    }
-
-    @Override
-    public void clearCompletedEvents() {
-        Runnable clearEventsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                mEventsDao.deleteCompletedEvents();
-
-            }
-        };
-
-        mAppExecutors.diskIO().execute(clearEventsRunnable);
-    }
 
     @Override
     public void refreshEvents() {

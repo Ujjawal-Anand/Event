@@ -55,11 +55,6 @@ public class EventsActivity extends AppCompatActivity {
                 Injection.provideEventsRepository(getApplicationContext()), eventsFragment);
 
         // Load previously saved state, if available.
-        if (savedInstanceState != null) {
-            EventsFilterType currentFiltering =
-                    (EventsFilterType) savedInstanceState.getSerializable(CURRENT_FILTERING_KEY);
-          //  mEventsPresenter.setFiltering(currentFiltering);
-        }
     }
 
     @Override

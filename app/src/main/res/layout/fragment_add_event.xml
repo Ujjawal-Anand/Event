@@ -6,11 +6,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/pickedImage"
+            android:visibility="gone"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnAddImageGallery"
+            android:layout_gravity="center_horizontal"
+            style="@style/LoginButtons"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="Add Image From Gallery"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnAddImageCamera"
+            android:layout_gravity="center_horizontal"
+            style="@style/LoginButtons"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:text="Add Image From Camera"/>
 
         <EditText
             android:id="@+id/add_event_title"
@@ -18,6 +49,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/title_hint"
             android:maxLines="1"
+            android:visibility="gone"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <EditText
@@ -27,6 +59,7 @@
             android:gravity="top"
             android:hint="@string/description_hint" />
 
+    </LinearLayout>
     </LinearLayout>
 </ScrollView>
 

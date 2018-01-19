@@ -26,6 +26,10 @@ dependencies {
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+    implementation "de.hdodenhof:circleimageview:$rootProject.circleimageviewVersion"
+    implementation "com.github.sharish:ShimmerRecyclerView:$rootProject.shimmerRecyclerViewVersion"
+
+
 
     compile "com.google.guava:guava:$rootProject.guavaVersion"
     compile "android.arch.persistence.room:runtime:$rootProject.roomVersion"

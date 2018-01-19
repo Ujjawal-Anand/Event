@@ -23,8 +23,8 @@
     <string name="menu_delete_event">Delete event</string>
     <string name="navigation_view_header_title">TO-DOs</string>
     <string name="title_hint">Title</string>
-    <string name="description_hint">Enter your TO-DO here.</string>
-    <string name="empty_event_message">TO DOs cannot be empty</string>
+    <string name="description_hint">Enter event details in here</string>
+    <string name="empty_event_message">Event can not be empty. Please Select an Image.</string>
     <string name="successfully_saved_event_message">TO-DO saved</string>
     <string name="list_title">TO-DO List</string>
     <string name="statistics_title">Statistics</string>
@@ -51,6 +51,11 @@
     <string name="no_events_completed">You have no completed TO-DOs!</string>
     <string name="no_events_add">Add a TO-DO item +</string>
     <string name="refresh">Refresh</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_request_permission">You need to give access to External Storage</string>
+
 
 
 </resources>

@@ -1,15 +1,23 @@
 package uscool.io.event.home;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,10 +31,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+
 import uscool.io.event.R;
 import uscool.io.event.addeditevent.AddEditEventActivity;
 import uscool.io.event.data.Event;
-import uscool.io.event.eventdetail.EventDetailActivity;
+import uscool.io.event.util.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +52,7 @@ public class EventsFragment extends Fragment implements EventsContract.View {
 
     private EventsContract.Presenter mPresenter;
 
-    private EventsAdapter mListAdapter;
+    private EventsAdapter mEventsAdapter;
 
     private View mNoEventsView;
 
@@ -54,7 +64,9 @@ public class EventsFragment extends Fragment implements EventsContract.View {
 
     private LinearLayout mEventsView;
 
-    private TextView mFilteringLabelView;
+    private ShimmerRecyclerView mRecyclerView;
+
+
 
     public EventsFragment() {
         // Requires empty public constructor
@@ -67,13 +79,53 @@ public class EventsFragment extends Fragment implements EventsContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListAdapter = new EventsAdapter(new ArrayList<Event>(0), mItemListener);
+        mEventsAdapter = new EventsAdapter(getContext(), new ArrayList<Event>(0), mItemListener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.start();
+    }
+
+    @Override
+    public void requestForPermission() {
+
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                    promptForPermissionsDialog(getString(R.string.error_request_permission), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    100);
+                        }
+                    });
+
+                } else {
+
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            100);
+                }
+            }
+
+    }
+
+    private void promptForPermissionsDialog(String message, DialogInterface.OnClickListener onClickListener) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setMessage(message)
+                .setPositiveButton(getString(R.string.ok), onClickListener)
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create()
+                .show();
+
     }
 
     @Override
@@ -93,9 +145,9 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         View root = inflater.inflate(R.layout.fragment_events, container, false);
 
         // Set up events view
-        ListView listView =  root.findViewById(R.id.events_list);
-        listView.setAdapter(mListAdapter);
-        mFilteringLabelView =  root.findViewById(R.id.filteringLabel);
+//        ListView listView =  root.findViewById(R.id.events_list);
+//        listView.setAdapter(mListAdapter);
+        mRecyclerView = root.findViewById(R.id.recyclerView);
         mEventsView =  root.findViewById(R.id.eventsLL);
 
         // Set up  no events view
@@ -130,8 +182,10 @@ public class EventsFragment extends Fragment implements EventsContract.View {
                 ContextCompat.getColor(getActivity(), R.color.colorAccent),
                 ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark)
         );
+
+        setUpRecyclerView();
         // Set the scrolling view in the custom SwipeRefreshLayout.
-        swipeRefreshLayout.setScrollUpChild(listView);
+        swipeRefreshLayout.setScrollUpChild(mRecyclerView);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -145,15 +199,17 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         return root;
     }
 
+    private void setUpRecyclerView() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, 20, true));
+        mRecyclerView.showShimmerAdapter();
+        mRecyclerView.setAdapter(mEventsAdapter);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_clear:
-                mPresenter.clearCompletedEvents();
-                break;
-            case R.id.menu_filter:
-                showFilteringPopUpMenu();
-                break;
             case R.id.menu_refresh:
                 mPresenter.loadEvents(true);
                 break;
@@ -166,31 +222,6 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         inflater.inflate(R.menu.events_fragment_menu, menu);
     }
 
-    @Override
-    public void showFilteringPopUpMenu() {
-        PopupMenu popup = new PopupMenu(getContext(), getActivity().findViewById(R.id.menu_filter));
-        popup.getMenuInflater().inflate(R.menu.filter_events, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.active:
-                        mPresenter.setFiltering(EventsFilterType.ACTIVE_TASKS);
-                        break;
-                    case R.id.completed:
-                        mPresenter.setFiltering(EventsFilterType.COMPLETED_TASKS);
-                        break;
-                    default:
-                        mPresenter.setFiltering(EventsFilterType.ALL_TASKS);
-                        break;
-                }
-                mPresenter.loadEvents(false);
-                return true;
-            }
-        });
-
-        popup.show();
-    }
 
     /**
      * Listener for clicks on events in the ListView.
@@ -200,16 +231,6 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         public void onEventClick(Event clickedEvent) {
             mPresenter.openEventDetails(clickedEvent);
         }
-
-        @Override
-        public void onCompleteEventClick(Event completedEvent) {
-            mPresenter.completeEvent(completedEvent);
-        }
-
-        @Override
-        public void onActivateEventClick(Event activatedEvent) {
-            mPresenter.activateEvent(activatedEvent);
-        }
     };
 
     @Override
@@ -218,8 +239,12 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         if (getView() == null) {
             return;
         }
-        final SwipeRefreshLayout srl =
-                (SwipeRefreshLayout) getView().findViewById(R.id.refresh_layout);
+        final SwipeRefreshLayout srl = getView().findViewById(R.id.refresh_layout);
+        if(active) {
+            mRecyclerView.showShimmerAdapter();
+        } else {
+            mRecyclerView.hideShimmerAdapter();
+        }
 
         // Make sure setRefreshing() is called after the layout is done with everything else.
         srl.post(new Runnable() {
@@ -232,19 +257,10 @@ public class EventsFragment extends Fragment implements EventsContract.View {
 
     @Override
     public void showEvents(List<Event> events) {
-        mListAdapter.replaceData(events);
+        mEventsAdapter.replaceData(events);
 
         mEventsView.setVisibility(View.VISIBLE);
         mNoEventsView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showNoActiveEvents() {
-        showNoEventsViews(
-                getResources().getString(R.string.no_events_active),
-                R.drawable.ic_check_circle_24dp,
-                false
-        );
     }
 
     @Override
@@ -256,14 +272,6 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         );
     }
 
-    @Override
-    public void showNoCompletedEvents() {
-        showNoEventsViews(
-                getResources().getString(R.string.no_events_completed),
-                R.drawable.ic_verified_user_24dp,
-                false
-        );
-    }
 
     @Override
     public void showSuccessfullySavedMessage() {
@@ -280,21 +288,6 @@ public class EventsFragment extends Fragment implements EventsContract.View {
     }
 
     @Override
-    public void showActiveFilterLabel() {
-        mFilteringLabelView.setText(getResources().getString(R.string.label_active));
-    }
-
-    @Override
-    public void showCompletedFilterLabel() {
-        mFilteringLabelView.setText(getResources().getString(R.string.label_completed));
-    }
-
-    @Override
-    public void showAllFilterLabel() {
-        mFilteringLabelView.setText(getResources().getString(R.string.label_all));
-    }
-
-    @Override
     public void showAddEvent() {
         Intent intent = new Intent(getContext(), AddEditEventActivity.class);
         startActivityForResult(intent, AddEditEventActivity.REQUEST_ADD_TASK);
@@ -304,24 +297,9 @@ public class EventsFragment extends Fragment implements EventsContract.View {
     public void showEventDetailsUi(String eventId) {
         // in it's own Activity, since it makes more sense that way and it gives us the flexibility
         // to show some Intent stubbing.
-        Intent intent = new Intent(getContext(), EventDetailActivity.class);
-        intent.putExtra(EventDetailActivity.EXTRA_TASK_ID, eventId);
-        startActivity(intent);
-    }
-
-    @Override
-    public void showEventMarkedComplete() {
-        showMessage(getString(R.string.event_marked_complete));
-    }
-
-    @Override
-    public void showEventMarkedActive() {
-        showMessage(getString(R.string.event_marked_active));
-    }
-
-    @Override
-    public void showCompletedEventsCleared() {
-        showMessage(getString(R.string.completed_events_cleared));
+//        Intent intent = new Intent(getContext(), EventDetailActivity.class);
+//        intent.putExtra(EventDetailActivity.EXTRA_TASK_ID, eventId);
+//        startActivity(intent);
     }
 
     @Override
@@ -338,7 +316,7 @@ public class EventsFragment extends Fragment implements EventsContract.View {
         return isAdded();
     }
 
-    private static class EventsAdapter extends BaseAdapter {
+    /*private static class EventsAdapter extends BaseAdapter {
 
         private List<Event> mEvents;
         private EventItemListener mItemListener;
@@ -397,17 +375,6 @@ public class EventsFragment extends Fragment implements EventsContract.View {
                         .getResources().getDrawable(R.drawable.touch_feedback));
             }
 
-            completeCB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!event.isCompleted()) {
-                        mItemListener.onCompleteEventClick(event);
-                    } else {
-                        mItemListener.onActivateEventClick(event);
-                    }
-                }
-            });
-
             rowView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -418,14 +385,10 @@ public class EventsFragment extends Fragment implements EventsContract.View {
             return rowView;
         }
     }
-
+*/
     public interface EventItemListener {
 
         void onEventClick(Event clickedEvent);
-
-        void onCompleteEventClick(Event completedEvent);
-
-        void onActivateEventClick(Event activatedEvent);
     }
 
 }

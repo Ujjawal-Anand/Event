@@ -28,5 +28,7 @@
     <color name="login_button_color">#1966CC66</color>
     <color name="login_button_color_pressed">#6666CC66</color>
     <color name="login_button_color_disabled">#0C66CC66</color>
+    <color name="text_like_counter">#2b5a83</color>
+
 
 </resources>

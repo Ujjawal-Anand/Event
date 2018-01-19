@@ -53,13 +53,13 @@ public interface EventsDao {
     int updateEvent(Event event);
 
     /**
-     * Update the complete status of a event
+     * Update the likes of an event
      *
      * @param eventId    id of the event
-     * @param completed status to be updated
+     * @param likes number of likes to be updated
      */
-    @Query("UPDATE Events SET completed = :completed WHERE entryid = :eventId")
-    void updateCompleted(String eventId, boolean completed);
+    @Query("UPDATE EVENTS SET likes = :likes WHERE entryid= :eventId")
+    void updateLikes(String eventId, int likes);
 
     /**
      * Delete a event by id.
@@ -75,11 +75,4 @@ public interface EventsDao {
     @Query("DELETE FROM Events")
     void deleteEvents();
 
-    /**
-     * Delete all completed events from the table.
-     *
-     * @return the number of events deleted.
-     */
-    @Query("DELETE FROM Events WHERE completed = 1")
-    int deleteCompletedEvents();
 }

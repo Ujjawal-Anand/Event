@@ -38,7 +38,8 @@ public class EventsPresenter implements EventsContract.Presenter {
 
     @Override
     public void start() {
-        loadEvents(false);
+        mEventsView.requestForPermission();
+        loadEvents(true);
     }
 
     @Override
@@ -85,16 +86,6 @@ public class EventsPresenter implements EventsContract.Presenter {
                         case ALL_TASKS:
                             eventsToShow.add(event);
                             break;
-                        case ACTIVE_TASKS:
-                            if (event.isActive()) {
-                                eventsToShow.add(event);
-                            }
-                            break;
-                        case COMPLETED_TASKS:
-                            if (event.isCompleted()) {
-                                eventsToShow.add(event);
-                            }
-                            break;
                         default:
                             eventsToShow.add(event);
                             break;
@@ -125,42 +116,15 @@ public class EventsPresenter implements EventsContract.Presenter {
     private void processEvents(List<Event> events) {
         if (events.isEmpty()) {
             // Show a message indicating there are no events for that filter type.
-            processEmptyEvents();
+            mEventsView.showNoEvents();
         } else {
             // Show the list of events
             mEventsView.showEvents(events);
             // Set the filter label's text.
-            showFilterLabel();
         }
     }
 
-    private void showFilterLabel() {
-        switch (mCurrentFiltering) {
-            case ACTIVE_TASKS:
-                mEventsView.showActiveFilterLabel();
-                break;
-            case COMPLETED_TASKS:
-                mEventsView.showCompletedFilterLabel();
-                break;
-            default:
-                mEventsView.showAllFilterLabel();
-                break;
-        }
-    }
 
-    private void processEmptyEvents() {
-        switch (mCurrentFiltering) {
-            case ACTIVE_TASKS:
-                mEventsView.showNoActiveEvents();
-                break;
-            case COMPLETED_TASKS:
-                mEventsView.showNoCompletedEvents();
-                break;
-            default:
-                mEventsView.showNoEvents();
-                break;
-        }
-    }
 
     @Override
     public void addNewEvent() {
@@ -172,45 +136,4 @@ public class EventsPresenter implements EventsContract.Presenter {
         checkNotNull(requestedEvent, "requestedEvent cannot be null!");
         mEventsView.showEventDetailsUi(requestedEvent.getId());
     }
-
-    @Override
-    public void completeEvent(@NonNull Event completedEvent) {
-        checkNotNull(completedEvent, "completedEvent cannot be null!");
-        mEventsRepository.completeEvent(completedEvent);
-        mEventsView.showEventMarkedComplete();
-        loadEvents(false, false);
-    }
-
-    @Override
-    public void activateEvent(@NonNull Event activeEvent) {
-        checkNotNull(activeEvent, "activeEvent cannot be null!");
-        mEventsRepository.activateEvent(activeEvent);
-        mEventsView.showEventMarkedActive();
-        loadEvents(false, false);
-    }
-
-    @Override
-    public void clearCompletedEvents() {
-        mEventsRepository.clearCompletedEvents();
-        mEventsView.showCompletedEventsCleared();
-        loadEvents(false, false);
-    }
-
-    /**
-     * Sets the current event filtering type.
-     *
-     * @param requestType Can be {@link EventsFilterType#ALL_TASKS},
-     *                    {@link EventsFilterType#COMPLETED_TASKS}, or
-     *                    {@link EventsFilterType#ACTIVE_TASKS}
-     */
-    @Override
-    public void setFiltering(EventsFilterType requestType) {
-        mCurrentFiltering = requestType;
-    }
-
-    @Override
-    public EventsFilterType getFiltering() {
-        return mCurrentFiltering;
-    }
-
 }

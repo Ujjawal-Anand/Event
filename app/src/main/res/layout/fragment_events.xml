@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <uscool.io.event.home.ScrollChildSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,21 +18,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/filteringLabel"
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="@dimen/list_item_padding"
-                android:layout_marginRight="@dimen/list_item_padding"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin" />
-
-            <ListView
-                android:id="@+id/events_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:shimmer_demo_child_count="5"
+                app:shimmer_demo_layout="@layout/item_shimmer_event_demo"
+                app:shimmer_demo_shimmer_color="#73ffffff"
+                />
         </LinearLayout>
 
         <LinearLayout

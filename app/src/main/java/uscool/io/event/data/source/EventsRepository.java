@@ -26,7 +26,6 @@ public class EventsRepository implements EventsDataSource {
 
     private static EventsRepository INSTANCE = null;
 
-    private final EventsDataSource mEventsRemoteDataSource;
     private final EventsDataSource mEventsLocalDataSource;
 
 
@@ -45,9 +44,7 @@ public class EventsRepository implements EventsDataSource {
 
     // Prevent direct instantiation.
 
-    private EventsRepository(@NonNull EventsDataSource eventsRemoteDataSource,
-                             @NonNull EventsDataSource eventsLocalDataSource) {
-        mEventsRemoteDataSource = checkNotNull(eventsRemoteDataSource);
+    private EventsRepository(@NonNull EventsDataSource eventsLocalDataSource) {
         mEventsLocalDataSource = checkNotNull(eventsLocalDataSource);
     }
 
@@ -55,20 +52,18 @@ public class EventsRepository implements EventsDataSource {
     /**
      * Returns the single instance of this class, creating it if necessary.
      *
-     * @param eventsRemoteDataSource the backend data source
      * @param eventsLocalDataSource  the device storage data source
      * @return the {@link EventsRepository} instance
      */
-    public static EventsRepository getInstance(EventsDataSource eventsRemoteDataSource,
-                                               EventsDataSource eventsLocalDataSource) {
+    public static EventsRepository getInstance(EventsDataSource eventsLocalDataSource) {
         if (INSTANCE == null) {
-            INSTANCE = new EventsRepository(eventsRemoteDataSource, eventsLocalDataSource);
+            INSTANCE = new EventsRepository(eventsLocalDataSource);
         }
         return INSTANCE;
     }
 
     /**
-     * Used to force {@link #getInstance(EventsDataSource, EventsDataSource)} to create a new instance
+     * Used to force {@link #getInstance(EventsDataSource)} to create a new instance
      * next time it's called.
      */
     public static void destroyInstance() {
@@ -95,7 +90,7 @@ public class EventsRepository implements EventsDataSource {
         if (mCacheIsDirty) {
             // If the cache is dirty we need to fetch new data from the network.
             getEventsFromRemoteDataSource(callback);
-        } /*else {
+        } else {
             // Query the local storage if available. If not, query the network.
             mEventsLocalDataSource.getEvents(new LoadEventsCallback() {
                 @Override
@@ -109,80 +104,19 @@ public class EventsRepository implements EventsDataSource {
                     getEventsFromRemoteDataSource(callback);
                 }
             });
-        }*/
+        }
     }
 
     @Override
     public void saveEvent(@NonNull Event event) {
         checkNotNull(event);
-        mEventsRemoteDataSource.saveEvent(event);
-//        mEventsLocalDataSource.saveEvent(event);
+        mEventsLocalDataSource.saveEvent(event);
 
         // Do in memory cache update to keep the app UI up to date
         if (mCachedEvents == null) {
             mCachedEvents = new LinkedHashMap<>();
         }
         mCachedEvents.put(event.getId(), event);
-    }
-
-    @Override
-    public void completeEvent(@NonNull Event event) {
-        checkNotNull(event);
-        mEventsRemoteDataSource.completeEvent(event);
-//        mEventsLocalDataSource.completeEvent(event);
-
-        Event completedEvent = new Event(event.getTitle(), event.getDescription(), event.getId(), true);
-
-        // Do in memory cache update to keep the app UI up to date
-        if (mCachedEvents == null) {
-            mCachedEvents = new LinkedHashMap<>();
-        }
-        mCachedEvents.put(event.getId(), completedEvent);
-    }
-
-    @Override
-    public void completeEvent(@NonNull String eventId) {
-        checkNotNull(eventId);
-        completeEvent(getEventWithId(eventId));
-    }
-
-    @Override
-    public void activateEvent(@NonNull Event event) {
-        checkNotNull(event);
-        mEventsRemoteDataSource.activateEvent(event);
-//        mEventsLocalDataSource.activateEvent(event);
-
-        Event activeEvent = new Event(event.getTitle(), event.getDescription(), event.getId());
-
-        // Do in memory cache update to keep the app UI up to date
-        if (mCachedEvents == null) {
-            mCachedEvents = new LinkedHashMap<>();
-        }
-        mCachedEvents.put(event.getId(), activeEvent);
-    }
-
-    @Override
-    public void activateEvent(@NonNull String eventId) {
-        checkNotNull(eventId);
-        activateEvent(getEventWithId(eventId));
-    }
-
-    @Override
-    public void clearCompletedEvents() {
-        mEventsRemoteDataSource.clearCompletedEvents();
-//        mEventsLocalDataSource.clearCompletedEvents();
-
-        // Do in memory cache update to keep the app UI up to date
-        if (mCachedEvents == null) {
-            mCachedEvents = new LinkedHashMap<>();
-        }
-        Iterator<Map.Entry<String, Event>> it = mCachedEvents.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, Event> entry = it.next();
-            if (entry.getValue().isCompleted()) {
-                it.remove();
-            }
-        }
     }
 
     /**
@@ -208,7 +142,7 @@ public class EventsRepository implements EventsDataSource {
         // Load from server/persisted if needed.
 
         // Is the event in the local data source? If not, query the network.
-      /*  mEventsLocalDataSource.getEvent(eventId, new GetEventCallback() {
+        mEventsLocalDataSource.getEvent(eventId, new GetEventCallback() {
             @Override
             public void onEventLoaded(Event event) {
                 // Do in memory cache update to keep the app UI up to date
@@ -221,24 +155,9 @@ public class EventsRepository implements EventsDataSource {
 
             @Override
             public void onDataNotAvailable() {
-                mEventsRemoteDataSource.getEvent(eventId, new GetEventCallback() {
-                    @Override
-                    public void onEventLoaded(Event event) {
-                        // Do in memory cache update to keep the app UI up to date
-                        if (mCachedEvents == null) {
-                            mCachedEvents = new LinkedHashMap<>();
-                        }
-                        mCachedEvents.put(event.getId(), event);
-                        callback.onEventLoaded(event);
-                    }
 
-                    @Override
-                    public void onDataNotAvailable() {
-                        callback.onDataNotAvailable();
-                    }
-                });
             }
-        });*/
+        });
     }
 
     @Override
@@ -248,8 +167,7 @@ public class EventsRepository implements EventsDataSource {
 
     @Override
     public void deleteAllEvents() {
-        mEventsRemoteDataSource.deleteAllEvents();
-//        mEventsLocalDataSource.deleteAllEvents();
+        mEventsLocalDataSource.deleteAllEvents();
 
         if (mCachedEvents == null) {
             mCachedEvents = new LinkedHashMap<>();
@@ -259,26 +177,13 @@ public class EventsRepository implements EventsDataSource {
 
     @Override
     public void deleteEvent(@NonNull String eventId) {
-        mEventsRemoteDataSource.deleteEvent(checkNotNull(eventId));
-//        mEventsLocalDataSource.deleteEvent(checkNotNull(eventId));
+        mEventsLocalDataSource.deleteEvent(checkNotNull(eventId));
 
         mCachedEvents.remove(eventId);
     }
 
     private void getEventsFromRemoteDataSource(@NonNull final LoadEventsCallback callback) {
-        mEventsRemoteDataSource.getEvents(new LoadEventsCallback() {
-            @Override
-            public void onEventsLoaded(List<Event> events) {
-                refreshCache(events);
-//                refreshLocalDataSource(events);
-                callback.onEventsLoaded(new ArrayList<>(mCachedEvents.values()));
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                callback.onDataNotAvailable();
-            }
-        });
+//
     }
 
     private void refreshCache(List<Event> events) {
